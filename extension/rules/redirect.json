@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": { "url": "https://x.com/i/history/likes" }
+    },
+    "condition": {
+      "regexFilter": "^https://(www\\.)?(x|twitter)\\.com/i/(bookmarks(/[^?#]*)?|history/?|history/bookmarks(/[^?#]*)?)([?#].*)?$",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]

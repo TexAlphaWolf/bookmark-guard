@@ -1,0 +1,41 @@
+name: Bug report
+description: Something doesn't work as expected (for example after X changed its layout)
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: e.g. Chrome 142, Firefox 145
+    validations:
+      required: true
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      placeholder: e.g. 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Popup mode
+      options:
+        - Faded, not clickable
+        - Fully hidden
+        - Blocking turned off
+  - type: textarea
+    id: console
+    attributes:
+      label: Page info (optional)
+      description: |
+        On x.com, open DevTools (F12) → Console and paste the output of:
+        `document.documentElement.className + ' ' + location.pathname`
+      render: text

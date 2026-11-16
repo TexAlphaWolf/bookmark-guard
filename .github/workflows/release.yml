@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Check tag matches manifest and package versions
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          MANIFEST="$(jq -r .version extension/manifest.json)"
+          PACKAGE="$(jq -r .version package.json)"
+          if [ "$TAG" != "$MANIFEST" ] || [ "$TAG" != "$PACKAGE" ]; then
+            echo "::error::Tag v$TAG must match manifest ($MANIFEST) and package.json ($PACKAGE)"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint and test
+        run: npm run check
+
+      - name: Build package
+        run: |
+          npm run build
+          # Ship the license inside the package, as the MIT license requires
+          zip -j "dist/bookmark-guard-${GITHUB_REF_NAME#v}.zip" LICENSE
+
+      - name: Extract release notes from CHANGELOG
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found && /^\[[^]]+\]: / { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "Release ${GITHUB_REF_NAME}" > notes.md
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "dist/bookmark-guard-${GITHUB_REF_NAME#v}.zip" \
+            --title "Bookmark Guard for X ${GITHUB_REF_NAME}" \
+            --notes-file notes.md --verify-tag

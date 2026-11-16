@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../icons/icon48.png" alt="" width="28" height="28">
+    <h1>Bookmark Guard</h1>
+  </header>
+
+  <label class="row switch-row">
+    <span>Blocking enabled</span>
+    <input type="checkbox" id="enabled" role="switch">
+  </label>
+
+  <fieldset id="mode-group">
+    <legend>How to show the link</legend>
+    <label class="row"><input type="radio" name="mode" value="dim"> Faded, not clickable</label>
+    <label class="row"><input type="radio" name="mode" value="hide"> Fully hidden</label>
+  </fieldset>
+
+  <p id="status" class="status"></p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

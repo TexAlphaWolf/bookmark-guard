@@ -1,0 +1,25 @@
+{
+  "name": "bookmark-guard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser extension that blocks the Bookmarks tab on X/Twitter and opens Likes instead.",
+  "license": "MIT",
+  "author": "TexAlphaWolf",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TexAlphaWolf/bookmark-guard.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.js\"",
+    "lint": "web-ext lint --source-dir extension --self-hosted",
+    "build": "web-ext build --source-dir extension --artifacts-dir dist --overwrite-dest --filename bookmark-guard-{version}.zip",
+    "check": "npm run lint && npm test"
+  },
+  "devDependencies": {
+    "jsdom": "^31.0.1",
+    "web-ext": "^10.8.0"
+  }
+}
